@@ -8,6 +8,8 @@ type Spot = {
   rating: number;
   vibe: string[];
   reason?: string;
+  lat?: number;
+  lng?: number;
 };
 
 export default function Finder() {
@@ -21,6 +23,9 @@ export default function Finder() {
 
     const res = await fetch("/api/recommend", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ budget, vibe }),
     });
 
@@ -61,71 +66,85 @@ export default function Finder() {
 
         <br /><br />
 
-        <button onClick={search}>
+        <button onClick={search}
+          style={{
+            padding: "10px 16px",
+            background: "#0070f3",
+            color: "#fff",
+            borderRadius: "6px"
+          }}
+          >
           {loading ? "Searching..." : "Search"}
         </button>
+        {loading && <p style={{ marginTop: "10px" }}>🔍 Searching...</p>}
       </div>
 
       {/* 結果表示 */}
       <div>
+          {/* 👇ここに追加 */}
+          {results.length === 0 && !loading && (
+            <p style={{ marginTop: "20px", color: "#666" }}>
+            No spots found. Try different filters.</p>
+          )}
         {results.map((r) => (
           <div
             key={r.name}
             style={{
               border: "1px solid #ccc",
               borderRadius: "8px",
-              padding: "12px",
-              marginBottom: "12px",
-            }}
+              padding: "16px",
+              marginBottom: "16px",
+              background: "#fff",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+              }}
           >
-            <h2>{r.name}</h2>
+            <h2  style={{ marginBottom: "8px" }}>
+              {r.name}
+            </h2>
 
-            <p>⭐ Rating: {r.rating}</p>
+            <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
             <p>💰 Price: {r.price}</p>
             {r.rating > 4.3 && (
             <p style={{ color: "red" }}>🔥 Popular spot</p>
             )}
 
             {r.reason && (
-              <p style={{ fontStyle: "italic" }}>
+              <p style={{ fontStyle: "italic", color:"#555", marginTop: "6px" }}>
                 {r.reason}
               </p>
             )}
 
-            {/* Google Mapsリンク */}
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                r.name
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              📍 View on Google Maps
-            </a>
-
+            {/* Google Maps埋め込み */}
+            {r.lat && r.lng && (
+              <iframe
+                width="100%"
+                height="200"
+                style={{ border: 0 }}
+                loading="lazy"
+                src={`https://www.google.com/maps?q=${r.lat},${r.lng}&output=embed`}
+              ></iframe>
+              )
+            }
             <br />
 
             {/* 仮の収益ボタン */}
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}`}
+              href="https://affiliate.klook.com/redirect?aid=117048&aff_adid=1253921&k_site=https%3A%2F%2Fwww.klook.com%2F"
               target="_blank"
+              rel="noopener noreferrer"
               style={{
-                display: "inline-block",
+                display: "block",
                 marginTop: "8px",
-                padding: "8px 12px",
-                background: "#ff5a5f",
+                padding: "8px",
+                background: "#333",
                 color: "#fff",
                 borderRadius: "6px",
+                textAlign: "center",
+                fontSize: "13px",
                 textDecoration: "none"
               }}
             >
-              🧩Book / View Details
-            </a>
-            <a
-              href="https://www.klook.com/"
-              target="_blank"
-            >
-              🎟 Book Experience
+              🎟 Book Tours & Experiences
             </a>
           </div>
         ))}

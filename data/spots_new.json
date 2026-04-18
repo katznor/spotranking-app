@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Ichiran Shibuya",
+    "price": "low",
+    "rating": 4.2,
+    "user_ratings_total": 1200,
+    "vibe": [
+      "solo",
+      "fast"
+    ],
+    "openLate": true,
+    "foreignFriendly": true,
+    "lat": 35.6611185,
+    "lng": 139.7009846
+  },
+  {
+    "name": "Uobei Shibuya",
+    "price": "low",
+    "rating": 4.1,
+    "user_ratings_total": 900,
+    "vibe": [
+      "fun",
+      "casual"
+    ],
+    "openLate": true,
+    "foreignFriendly": true,
+    "lat": 35.6594349,
+    "lng": 139.6979207
+  },
+  {
+    "name": "Starbucks Shibuya Scramble",
+    "price": "medium",
+    "rating": 4.3,
+    "user_ratings_total": 1500,
+    "vibe": [
+      "chill",
+      "wifi"
+    ],
+    "openLate": false,
+    "foreignFriendly": true,
+    "lat": 35.658317,
+    "lng": 139.702368
+  }
+]
