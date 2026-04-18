@@ -46,20 +46,51 @@ export default function Finder() {
   };
 
   return (
-    <main style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h1>Find your perfect spot in Shibuya</h1>
+  <main style={{
+    padding: "20px",
+    maxWidth: "600px",
+    margin: "0 auto",
+    background: "#f7f7f7",
+    minHeight: "100vh"
+  }}>
+
+    
+      <h1 style={{
+        fontSize: "24px",
+        fontWeight: "bold",
+        marginBottom: "10px"
+      }}>
+      Find your perfect spot in Shibuya
+      </h1>
+      <p style={{ color: "#666", marginBottom: "20px" }}>
+        Discover the best places based on your vibe.
+      </p>
 
       {/* 入力UI */}
-      <div style={{ marginBottom: "20px" }}>
+        <div style={{
+          marginBottom: "20px",
+          padding: "16px",
+          background: "#fff",
+          borderRadius: "10px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
+        }}>
         <label>Budget: </label>
         <select
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
-        >
-          <option value="low">$</option>
-          <option value="medium">$$</option>
-          <option value="high">$$$</option>
-        </select>
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginTop: "5px",
+            marginBottom: "10px",
+            borderRadius: "6px",
+            border: "1px solid #ccc"
+          }}
+           >
+            <option value="low">$</option>
+            <option value="medium">$$</option>
+            <option value="high">$$$</option>
+          <select>
 
         <br /><br />
 
@@ -67,6 +98,16 @@ export default function Finder() {
         <select
           value={vibe}
           onChange={(e) => setVibe(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginTop: "6px",
+            marginBottom: "12px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            background: "#fff",
+            fontSize: "14px"
+          }}
         >
           <option value="chill">Chill</option>
           <option value="solo">Solo</option>
@@ -78,10 +119,10 @@ export default function Finder() {
 
         <button onClick={search}
           style={{
-            padding: "10px 16px",
-            background: "#0070f3",
-            color: "#fff",
-            borderRadius: "6px"
+          background: "#ff5a5f"
+          fontSize: "16px"
+          width: "100%"
+          padding: "14px"
           }}
           >
           {loading ? "Searching..." : "Search"}
