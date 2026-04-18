@@ -118,7 +118,7 @@ export default function Finder() {
             )}
 
             {/* Google Maps埋め込み */}
-            {r.lat ! = null && r.lng ! = null && (
+            {r.lat != null && r.lng != null && (
               <iframe
                 width="100%"
                 height="200"
