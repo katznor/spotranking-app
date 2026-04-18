@@ -1,29 +1,50 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
+import path from "path";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    const { type, name } = body;
 
-    const log = {
-      ...body,
-      timestamp: new Date().toISOString(),
-    };
+    // ===== 通常ログ =====
+    const logPath = path.join(process.cwd(), "data", "clicks.json");
 
-    const path = "./data/clicks.json";
+    let logs: any[] = [];
 
-    let logs = [];
-
-    if (fs.existsSync(path)) {
-      logs = JSON.parse(fs.readFileSync(path, "utf-8"));
+    if (fs.existsSync(logPath)) {
+      logs = JSON.parse(fs.readFileSync(logPath, "utf-8"));
     }
 
-    logs.push(log);
+    logs.push({
+      ...body,
+      timestamp: new Date().toISOString(),
+    });
 
-    fs.writeFileSync(path, JSON.stringify(logs, null, 2));
+    fs.writeFileSync(logPath, JSON.stringify(logs, null, 2));
+
+    // ===== ホテルクリック（ここ重要）=====
+    if (type === "hotel") {
+      const hotelPath = path.join(
+        process.cwd(),
+        "data",
+        "hotel_clicks.json"
+      );
+
+      let hotelData: Record<string, number> = {};
+
+      if (fs.existsSync(hotelPath)) {
+        hotelData = JSON.parse(fs.readFileSync(hotelPath, "utf-8"));
+      }
+
+      hotelData[name] = (hotelData[name] || 0) + 1;
+
+      fs.writeFileSync(hotelPath, JSON.stringify(hotelData, null, 2));
+    }
 
     return NextResponse.json({ status: "ok" });
   } catch (e) {
+    console.error(e);
     return NextResponse.json({ error: "fail" }, { status: 500 });
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Spot = {
   name: string;
@@ -18,6 +19,23 @@ export default function Finder() {
   const [results, setResults] = useState<Spot[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const router = useRouter();
+  const hotels = [
+  {
+    name: "Shibuya Excel Hotel Tokyu",
+    url: "https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&hid=7005"
+  },
+  {
+    name: "Cerulean Tower Tokyu Hotel",
+    url: "https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&hid=9068227"
+  },
+  {
+    name: "Shibuya Tokyu REI Hotel",
+    url: "https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&hid=2312"
+  }
+  ];
+  const randomHotel =
+  hotels[Math.floor(Math.random() * hotels.length)];
     // 👇ここに追加（searchの外！！）
   const trackClick = async (type: string, name: string) => {
     await fetch("/api/click", {
@@ -57,7 +75,21 @@ export default function Finder() {
     color: "#111"
   }}>
 
-    
+  <button
+  onClick={() => router.back()}
+  style={{
+    marginBottom: "12px",
+    padding: "8px 14px",
+    background: "#fff",
+    borderRadius: "8px",
+    border: "1px solid #ddd",
+    cursor: "pointer",
+    fontSize: "14px"
+  }}
+>
+  ← Back to Home
+</button>
+
       <h1 style={{
         fontSize: "24px",
         fontWeight: "bold",
@@ -173,28 +205,28 @@ export default function Finder() {
           </h2>
                   {/* ① 1位の直後にホテル */}
 
-    {index === 0 && (
+ {index === 0 && (
 
-      <a
-        href="https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&city=5085"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => trackClick("hotel", r.name)}
-        style={{
-          display: "block",
-          marginTop: "10px",
-          padding: "12px",
-          background: "#ff5a5f",
-          color: "#fff",
-          borderRadius: "8px",
-          textAlign: "center",
-          fontWeight: "bold",
-          textDecoration: "none"
-        }}
-      >
-        🏨 Stay near this spot (Save up to 40%)
-      </a>
-    )}
+  <a
+    href={randomHotel.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    onClick={() => trackClick("hotel", randomHotel.name)}
+    style={{
+      display: "block",
+      marginTop: "10px",
+      padding: "12px",
+      background: "#ff5a5f",
+      color: "#fff",
+      borderRadius: "8px",
+      textAlign: "center",
+      fontWeight: "bold",
+      textDecoration: "none"
+    }}
+  >
+    🏨 Stay at {randomHotel.name}
+  </a>
+)}
             <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
             <p>💰 Price: {r.price}</p>
             {r.rating > 4.3 && (
