@@ -48,7 +48,8 @@ export default function Finder() {
   return (
   <main style={{
     padding: "20px",
-    maxWidth: "600px",
+    maxWidth: "900px",
+    width: "100%",
     margin: "0 auto",
     background: "#f7f7f7",
     minHeight: "100vh"
