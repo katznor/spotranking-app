@@ -30,7 +30,7 @@ async function main() {
     const { lat, lng } = await getLatLng(spot.name);
 
     // 👇ここが追加ポイント
-    if (lat && lng) {
+    if (lat != null && lng != null) {
         newSpots.push({
         ...spot,
         lat,

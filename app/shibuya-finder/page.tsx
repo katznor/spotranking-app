@@ -17,7 +17,17 @@ export default function Finder() {
   const [vibe, setVibe] = useState("chill");
   const [results, setResults] = useState<Spot[]>([]);
   const [loading, setLoading] = useState(false);
-
+    // 👇ここに追加（searchの外！！）
+  const trackClick = async (type: string, name: string) => {
+    await fetch("/api/click", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ type, name }),
+    });
+  };
+  
   const search = async () => {
     setLoading(true);
 
@@ -86,7 +96,7 @@ export default function Finder() {
             <p style={{ marginTop: "20px", color: "#666" }}>
             No spots found. Try different filters.</p>
           )}
-        {results.map((r) => {
+        {results.map((r, index) => {
           console.log("DEBUG:", r); // ←これ追加
 
           return(
@@ -101,14 +111,49 @@ export default function Finder() {
               boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
               }}
           >
-            <h2  style={{ marginBottom: "8px" }}>
-             {r.name}
-            </h2>
+          <h2 style={{ marginBottom: "8px" }}>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#0070f3", textDecoration: "none" }}
+            >
+              {r.name}
+            </a>
+          </h2>
+                  {/* ① 1位の直後にホテル */}
 
+    {index === 0 && (
+
+      <a
+        href="https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&city=5085"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => trackClick("hotel", r.name)}
+        style={{
+          display: "block",
+          marginTop: "10px",
+          padding: "12px",
+          background: "#ff5a5f",
+          color: "#fff",
+          borderRadius: "8px",
+          textAlign: "center",
+          fontWeight: "bold",
+          textDecoration: "none"
+        }}
+      >
+        🏨 Stay near this spot (Save up to 40%)
+      </a>
+    )}
             <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
             <p>💰 Price: {r.price}</p>
             {r.rating > 4.3 && (
             <p style={{ color: "red" }}>🔥 Popular spot</p>
+            )}
+            {r.rating > 4.5 && (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              🔥 Highly Recommended
+            </p>
             )}
 
             {r.reason && (
@@ -135,19 +180,21 @@ export default function Finder() {
               href="https://affiliate.klook.com/redirect?aid=117048&aff_adid=1253921&k_site=https%3A%2F%2Fwww.klook.com%2F"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackClick("klook", r.name)}
               style={{
                 display: "block",
-                marginTop: "8px",
-                padding: "8px",
+                marginTop: "10px",
+                padding: "12px",
                 background: "#333",
                 color: "#fff",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 textAlign: "center",
-                fontSize: "13px",
+                fontWeight: "bold",
+                fontSize: "14px",
                 textDecoration: "none"
               }}
             >
-              🎟 Book Tours & Experiences
+              🔥 See Deals Near This Spot
             </a>
           </div>
           );

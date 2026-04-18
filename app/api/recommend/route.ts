@@ -18,29 +18,25 @@ export async function POST(req: Request) {
     // 👇ここ追加（神ロジック）
 
 if (results.length === 0) {
-
   console.log("Fallback triggered");
-
   results = spots.filter((s: any) => {
+  return !budget || s.price === budget;
+  });
+}
+// さらにダメなら
+if (results.length === 0) {
+  results = spots;
+}
 
-    return !budget || s.price === budget;
+  // ② ソート（ここ！）
+
+  results = results.sort((a: any, b: any) => {
+
+    return calculateScore(b, vibe, late) - calculateScore(a, vibe, late);
 
   });
 
-}
-
-// さらにダメなら
-
-if (results.length === 0) {
-
-  results = spots;
-
-}
-
-    // スコアリング（改善版）
-results = spots.sort((a, b) => {
-  return calculateScore(b, vibe, late) - calculateScore(a, vibe, late);
-});
+// スコアリング（改善版）
 
     // reason付与
     results = results.map((r: any) => ({
@@ -48,8 +44,13 @@ results = spots.sort((a, b) => {
       reason: buildReason(r, vibe),
     }));
 
+
+
+  // ④ slice（ここ！）
     return NextResponse.json(results.slice(0, 3));
-  } catch (error) {
+
+
+   } catch (error) {
     console.error("API error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -87,22 +88,18 @@ function calculateScore(r: any, vibe: string, late: boolean) {
 
 // ■ 理由生成（UXの核）
 function buildReason(r: any, vibe: string) {
-  let reasons: string[] = [];
+  let reasons = [];
 
   if (vibe && r.vibe.includes(vibe)) {
-    reasons.push(`Perfect for ${vibe} vibe`);
+    reasons.push(`🔥 Best for ${vibe}`);
   }
 
   if (r.openLate) {
-    reasons.push("Open late");
+    reasons.push("🌙 Open late");
   }
 
-  if (r.foreignFriendly) {
-    reasons.push("Easy for travelers");
-  }
-
-  if (r.rating > 4.3) {
-    reasons.push("Highly rated");
+  if (r.rating > 4.4) {
+    reasons.push("⭐ Top rated");
   }
 
   return reasons.join(" • ");
