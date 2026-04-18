@@ -88,6 +88,7 @@ export default function Finder() {
           )}
         {results.map((r) => {
           console.log("DEBUG:", r); // ←これ追加
+
           return(
           <div
             key={r.name}
@@ -101,13 +102,9 @@ export default function Finder() {
               }}
           >
             <h2  style={{ marginBottom: "8px" }}>
-              {r.name}
+             {r.name}
             </h2>
-          </div>
-          );
-        })}
-          
-            
+
             <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
             <p>💰 Price: {r.price}</p>
             {r.rating > 4.3 && (
@@ -121,14 +118,14 @@ export default function Finder() {
             )}
 
             {/* Google Maps埋め込み */}
-            {r.lat && r.lng && (
+            {r.lat ! = null && r.lng ! = null && (
               <iframe
                 width="100%"
                 height="200"
-                style={{ border: 0 }}
+                style={{ border: 0, marginTop: "10px" }}
                 loading="lazy"
                 src={`https://www.google.com/maps?q=${r.lat},${r.lng}&output=embed`}
-              ></iframe>
+              />
               )
             }
             <br />
@@ -153,8 +150,7 @@ export default function Finder() {
               🎟 Book Tours & Experiences
             </a>
           </div>
+          );
         ))}
       </div>
     </main>
-  );
-}
