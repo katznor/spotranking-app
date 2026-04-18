@@ -145,11 +145,12 @@ export default function Finder() {
             key={r.name}
             style={{
               border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "16px",
+              borderRadius: "10px",
+              padding: "14px",
               marginBottom: "16px",
               background: "#fff",
               boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+              width: "100%"
               }}
           >
           <h2 style={{ marginBottom: "8px" }}>
