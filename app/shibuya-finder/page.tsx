@@ -119,9 +119,9 @@ export default function Finder() {
 
         <button onClick={search}
           style={{
-          background: "#ff5a5f"
-          fontSize: "16px"
-          width: "100%"
+          background: "#ff5a5f",
+          fontSize: "16px",
+          width: "100%",
           padding: "14px"
           }}
           >
