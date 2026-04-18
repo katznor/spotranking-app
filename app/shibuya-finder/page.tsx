@@ -90,7 +90,7 @@ export default function Finder() {
             <option value="low">$</option>
             <option value="medium">$$</option>
             <option value="high">$$$</option>
-          <select>
+          </select>
 
         <br /><br />
 
