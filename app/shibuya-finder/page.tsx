@@ -86,7 +86,7 @@ export default function Finder() {
             <p style={{ marginTop: "20px", color: "#666" }}>
             No spots found. Try different filters.</p>
           )}
-        {results.map(r) => {
+        {results.map((r) => {
           console.log("DEBUG:", r); // ←これ追加
           return(
           <div
@@ -105,7 +105,7 @@ export default function Finder() {
             </h2>
           </div>
           );
-        }}
+        })}
           
             
             <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
