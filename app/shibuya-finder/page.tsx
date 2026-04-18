@@ -154,3 +154,5 @@ export default function Finder() {
         })}
       </div>
     </main>
+  );
+}
