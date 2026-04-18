@@ -151,6 +151,6 @@ export default function Finder() {
             </a>
           </div>
           );
-        ))}
+        })}
       </div>
     </main>
