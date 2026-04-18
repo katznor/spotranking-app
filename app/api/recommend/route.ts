@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import spots from "@/data/spots_new.json";
+import spots from "@/data/spots_real.json";
 
 export async function POST(req: Request) {
   try {
@@ -15,13 +15,32 @@ export async function POST(req: Request) {
         (!late || s.openLate)
       );
     });
+    // 👇ここ追加（神ロジック）
+
+if (results.length === 0) {
+
+  console.log("Fallback triggered");
+
+  results = spots.filter((s: any) => {
+
+    return !budget || s.price === budget;
+
+  });
+
+}
+
+// さらにダメなら
+
+if (results.length === 0) {
+
+  results = spots;
+
+}
 
     // スコアリング（改善版）
-    results = results.sort((a: any, b: any) => {
-      const scoreA = calculateScore(a, vibe, late);
-      const scoreB = calculateScore(b, vibe, late);
-      return scoreB - scoreA;
-    });
+results = spots.sort((a, b) => {
+  return calculateScore(b, vibe, late) - calculateScore(a, vibe, late);
+});
 
     // reason付与
     results = results.map((r: any) => ({

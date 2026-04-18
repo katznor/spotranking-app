@@ -29,11 +29,14 @@ async function main() {
 
     const { lat, lng } = await getLatLng(spot.name);
 
-    newSpots.push({
-      ...spot,
-      lat,
-      lng,
+    // 👇ここが追加ポイント
+    if (lat && lng) {
+        newSpots.push({
+        ...spot,
+        lat,
+        lng,
     });
+  }
 
     // API制限対策（重要）
     await new Promise((r) => setTimeout(r, 200));
