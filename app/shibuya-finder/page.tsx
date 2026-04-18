@@ -53,7 +53,8 @@ export default function Finder() {
     width: "100%",
     margin: "0 auto",
     background: "#f7f7f7",
-    minHeight: "100vh"
+    minHeight: "100vh",
+    color: "#111"
   }}>
 
     
@@ -234,8 +235,8 @@ export default function Finder() {
                 display: "block",
                 marginTop: "10px",
                 padding: "12px",
-                background: "#333",
-                color: "#fff",
+                background: "#fff",
+                color: "#000",
                 borderRadius: "8px",
                 textAlign: "center",
                 fontWeight: "bold",
