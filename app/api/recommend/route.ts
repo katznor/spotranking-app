@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import spots from "@/data/spots.json";
+import spots from "@/data/spots_new.json";
 
 export async function POST(req: Request) {
   try {
