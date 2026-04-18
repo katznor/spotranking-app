@@ -17,6 +17,7 @@ export default function Finder() {
   const [vibe, setVibe] = useState("chill");
   const [results, setResults] = useState<Spot[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
     // 👇ここに追加（searchの外！！）
   const trackClick = async (type: string, name: string) => {
     await fetch("/api/click", {
@@ -30,7 +31,7 @@ export default function Finder() {
   
   const search = async () => {
     setLoading(true);
-
+    setSearched(true);
     const res = await fetch("/api/recommend", {
       method: "POST",
       headers: {
@@ -133,8 +134,13 @@ export default function Finder() {
 
       {/* 結果表示 */}
       <div>
+        {!searched && (
+  <p style={{ color: "#888", marginTop: "10px" }}>
+    👆 Select your vibe and discover great spots!
+  </p>
+)}
           {/* 👇ここに追加 */}
-          {results.length === 0 && !loading && (
+          {searched && results.length === 0 && !loading && (
             <p style={{ marginTop: "20px", color: "#666" }}>
             No spots found. Try different filters.</p>
           )}
