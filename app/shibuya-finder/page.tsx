@@ -149,7 +149,7 @@ export default function Finder() {
               padding: "14px",
               marginBottom: "16px",
               background: "#fff",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.05)"
+              boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
               width: "100%"
               }}
           >
