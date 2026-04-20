@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { supabase } from "@/lib/supabase";
 
 export async function GET() {
-  const filePath = path.join(process.cwd(), "data", "hotel_clicks.json");
+  const { data } = await supabase
+    .from("hotel_clicks")
+    .select("*");
 
-  if (!fs.existsSync(filePath)) {
-    return NextResponse.json({});
-  }
+  const result: Record<string, number> = {};
 
-  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-  return NextResponse.json(data);
+  data?.forEach((row) => {
+    result[row.name] = row.count;
+  });
+
+  return NextResponse.json(result);
 }

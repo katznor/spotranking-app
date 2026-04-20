@@ -1,45 +1,30 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { type, name } = body;
+    const { type, name } = await req.json();
 
-    // ===== 通常ログ =====
-    const logPath = path.join(process.cwd(), "data", "clicks.json");
-
-    let logs: any[] = [];
-
-    if (fs.existsSync(logPath)) {
-      logs = JSON.parse(fs.readFileSync(logPath, "utf-8"));
-    }
-
-    logs.push({
-      ...body,
-      timestamp: new Date().toISOString(),
-    });
-
-    fs.writeFileSync(logPath, JSON.stringify(logs, null, 2));
-
-    // ===== ホテルクリック（ここ重要）=====
     if (type === "hotel") {
-      const hotelPath = path.join(
-        process.cwd(),
-        "data",
-        "hotel_clicks.json"
-      );
+      // 既存チェック
+      const { data } = await supabase
+        .from("hotel_clicks")
+        .select("*")
+        .eq("name", name)
+        .single();
 
-      let hotelData: Record<string, number> = {};
-
-      if (fs.existsSync(hotelPath)) {
-        hotelData = JSON.parse(fs.readFileSync(hotelPath, "utf-8"));
+      if (data) {
+        // 更新
+        await supabase
+          .from("hotel_clicks")
+          .update({ count: data.count + 1 })
+          .eq("name", name);
+      } else {
+        // 新規
+        await supabase
+          .from("hotel_clicks")
+          .insert([{ name, count: 1 }]);
       }
-
-      hotelData[name] = (hotelData[name] || 0) + 1;
-
-      fs.writeFileSync(hotelPath, JSON.stringify(hotelData, null, 2));
     }
 
     return NextResponse.json({ status: "ok" });
