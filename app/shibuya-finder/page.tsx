@@ -1,7 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+const [hotelClicks, setHotelClicks] = useState<any>({});
+
+useEffect(() => {
+  fetch("/api/hotel-clicks")
+    .then(res => res.json())
+    .then(data => setHotelClicks(data));
+}, []);
 
 type Spot = {
   name: string;
@@ -19,7 +27,31 @@ export default function Finder() {
   const [results, setResults] = useState<Spot[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  
   const router = useRouter();
+
+  useEffect(() => {
+  fetch("/api/hotel-clicks")
+    .then(res => res.json())
+    .then(data => {
+      console.log("hotelClicks:", data); // デバッグ
+      setHotelClicks(data);
+    });
+}, []);
+  
+  function pickHotelWeighted(hotels, clicks) {
+  const weights = hotels.map(h => (clicks[h.name] || 1));
+
+  const total = weights.reduce((a, b) => a + b, 0);
+  let rand = Math.random() * total;
+
+  for (let i = 0; i < hotels.length; i++) {
+    if (rand < weights[i]) return hotels[i];
+    rand -= weights[i];
+  }
+
+  return hotels[0];
+}
   const hotels = [
   {
     name: "Shibuya Excel Hotel Tokyu",
@@ -34,8 +66,14 @@ export default function Finder() {
     url: "https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&hid=2312"
   }
   ];
-  const randomHotel =
-  hotels[Math.floor(Math.random() * hotels.length)];
+const filteredHotels = hotels.filter(h => {
+  return (hotelClicks[h.name] || 0) >= 1;
+});
+
+const baseHotels =
+  filteredHotels.length > 0 ? filteredHotels : hotels;
+
+const randomHotel = pickHotelWeighted(baseHotels, hotelClicks);
     // 👇ここに追加（searchの外！！）
   const trackClick = async (type: string, name: string) => {
     await fetch("/api/click", {
@@ -62,7 +100,8 @@ export default function Finder() {
     setResults(data);
 
     setLoading(false);
-  };
+
+    };
 
   return (
   <main style={{
@@ -205,28 +244,28 @@ export default function Finder() {
           </h2>
                   {/* ① 1位の直後にホテル */}
 
- {index === 0 && (
+            {index === 0 && (
 
-  <a
-    href={randomHotel.url}
-    target="_blank"
-    rel="noopener noreferrer"
-    onClick={() => trackClick("hotel", randomHotel.name)}
-    style={{
-      display: "block",
-      marginTop: "10px",
-      padding: "12px",
-      background: "#ff5a5f",
-      color: "#fff",
-      borderRadius: "8px",
-      textAlign: "center",
-      fontWeight: "bold",
-      textDecoration: "none"
-    }}
-  >
-    🏨 Stay at {randomHotel.name}
-  </a>
-)}
+              <a
+                href={randomHotel.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackClick("hotel", randomHotel.name)}
+                style={{
+                  display: "block",
+                  marginTop: "10px",
+                  padding: "12px",
+                  background: "#ff5a5f",
+                  color: "#fff",
+                  borderRadius: "8px",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  textDecoration: "none"
+                }}
+              >
+                🏨 Stay at {randomHotel.name}
+              </a>
+            )}
             <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
             <p>💰 Price: {r.price}</p>
             {r.rating > 4.3 && (
