@@ -157,21 +157,26 @@ const topHotel = hotels.reduce((best, h) => {
           borderRadius: "10px",
           boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
         }}>
-        <label>Budget: </label>
+        <label style={{ 
+            fontSize: "clamp(14px, 1.5vw, 18px)",
+            fontWeight: "bold"         
+             }}>
+          Budget: 
+          </label>
         <select
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "14px",
-            marginTop: "8px",
-            background: "#fff",
-            fontSize: "16px",
-            fontWeight: "500",
-            borderRadius: "10px",
-            border: "1px solid #ccc"
-          }}
-           >
+            style={{
+              width: "100%",
+              padding: "clamp(12px, 2vw, 18px)",
+              fontSize: "clamp(16px, 2vw, 20px)",
+              borderRadius: "10px",
+              border: "1px solid #ccc",
+              background: "#fff",
+              fontWeight: "500",
+              cursor: "pointer" 
+            }}
+            >
             <option value="low">$</option>
             <option value="medium">$$</option>
             <option value="high">$$$</option>
@@ -179,19 +184,24 @@ const topHotel = hotels.reduce((best, h) => {
 
         <br /><br />
 
-        <label>Vibe: </label>
+        <label style={{
+            fontSize: "clamp(14px, 1.5vw, 18px)",
+            fontWeight: "bold"
+          }}> Vibe: 
+          </label>
         <select
           value={vibe}
           onChange={(e) => setVibe(e.target.value)}
-          style={{
-            padding: "14px",
-            marginTop: "8px",
-            background: "#fff",
-            fontSize: "16px",
-            fontWeight: "500",
-            borderRadius: "10px",
-            border: "1px solid #ccc"
-          }}
+            style={{
+              width: "100%",
+              padding: "clamp(12px, 2vw, 18px)",
+              fontSize: "clamp(16px, 2vw, 20px)",
+              borderRadius: "10px",
+              border: "1px solid #ccc",
+              background: "#fff",
+              fontWeight: "500",
+              cursor: "pointer"
+            }}        
         >
           <option value="chill">Chill</option>
           <option value="solo">Solo</option>
