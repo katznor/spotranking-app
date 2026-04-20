@@ -163,10 +163,12 @@ const topHotel = hotels.reduce((best, h) => {
           onChange={(e) => setBudget(e.target.value)}
           style={{
             width: "100%",
-            padding: "10px",
-            marginTop: "5px",
-            marginBottom: "10px",
-            borderRadius: "6px",
+            padding: "14px",
+            marginTop: "8px",
+            background: "#fff",
+            fontSize: "16px",
+            fontWeight: "500",
+            borderRadius: "10px",
             border: "1px solid #ccc"
           }}
            >
@@ -182,14 +184,13 @@ const topHotel = hotels.reduce((best, h) => {
           value={vibe}
           onChange={(e) => setVibe(e.target.value)}
           style={{
-            width: "100%",
-            padding: "10px",
-            marginTop: "6px",
-            marginBottom: "12px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
+            padding: "14px",
+            marginTop: "8px",
             background: "#fff",
-            fontSize: "14px"
+            fontSize: "16px",
+            fontWeight: "500",
+            borderRadius: "10px",
+            border: "1px solid #ccc"
           }}
         >
           <option value="chill">Chill</option>
