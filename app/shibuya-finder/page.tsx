@@ -51,17 +51,33 @@ export default function Finder() {
     return (clicks + 1) / (impressions + 2);
   }
 
-  function pickHotelWeighted(
+function pickHotelWeighted(
   hotels: { name: string; url: string }[]
-    ){const weights = hotels.map(h => calculateScore(h.name));
-    const total = weights.reduce((a, b) => a + b, 0);
-    let rand = Math.random() * total;
-    for (let i = 0; i < hotels.length; i++) {
-      if (rand < weights[i]) return hotels[i];
-      rand -= weights[i];
-    }
-    return hotels[0];
+) {
+  // 👇 20%は完全ランダム（探索）
+  if (Math.random() < 0.2) {
+    return hotels[Math.floor(Math.random() * hotels.length)];
   }
+
+  // 👇 80%はスコアベース（活用）
+  const weights = hotels.map(h => calculateScore(h.name));
+
+  const total = weights.reduce((a, b) => a + b, 0);
+
+  // 安全対策（ゼロ割防止）
+  if (total === 0) {
+    return hotels[Math.floor(Math.random() * hotels.length)];
+  }
+
+  let rand = Math.random() * total;
+
+  for (let i = 0; i < hotels.length; i++) {
+    if (rand < weights[i]) return hotels[i];
+    rand -= weights[i];
+  }
+
+  return hotels[0];
+}
 
   const hotels = [
   {
@@ -289,7 +305,7 @@ const topHotel = hotels.reduce((best, h) => {
                       textDecoration: "none"
                     }}
                   >
-                    👑 Best hotel near this spot
+                    🧳 Need a break? Find nearby hotels & luggage spots
                       <div style={{ fontSize: "12px", opacity: 0.9, marginTop: "4px" }}>
                         🏨 {topHotel.name}
                       </div>
@@ -314,7 +330,7 @@ const topHotel = hotels.reduce((best, h) => {
                       textDecoration: "none"
                     }}
                   >
-                    🔥 More stays near this area
+                    🔥 Check hotel prices near this spot
                       <div style={{ fontSize: "12px", opacity: 0.9, marginTop: "4px" }}>
                       🏨 {randomHotel.name}
                       </div>
