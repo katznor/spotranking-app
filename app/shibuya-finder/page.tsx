@@ -3,14 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const [hotelClicks, setHotelClicks] = useState<any>({});
-
-useEffect(() => {
-  fetch("/api/hotel-clicks")
-    .then(res => res.json())
-    .then(data => setHotelClicks(data));
-}, []);
-
 type Spot = {
   name: string;
   price: string;
@@ -38,8 +30,10 @@ export default function Finder() {
       setHotelClicks(data);
     });
 }, []);
-  
-  function pickHotelWeighted(hotels, clicks) {
+  function pickHotelWeighted(
+  hotels: { name: string; url: string }[],
+  clicks: Record<string, number>
+) {
   const weights = hotels.map(h => (clicks[h.name] || 1));
 
   const total = weights.reduce((a, b) => a + b, 0);
