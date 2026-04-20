@@ -27,7 +27,7 @@ export default function Finder() {
   const [results, setResults] = useState<Spot[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
-  
+  const [hotelClicks, setHotelClicks] = useState<any>({});
   const router = useRouter();
 
   useEffect(() => {
