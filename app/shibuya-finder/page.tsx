@@ -19,7 +19,10 @@ export default function Finder() {
   const [results, setResults] = useState<Spot[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
-  const [hotelClicks, setHotelClicks] = useState<any>({});
+
+  const [hotelClicks, setHotelClicks] = useState<Record<string, number>>({});
+  const [hotelImpressions, setHotelImpressions] = useState<Record<string, number>>({});
+
   const router = useRouter();
 
   useEffect(() => {
@@ -30,22 +33,36 @@ export default function Finder() {
       setHotelClicks(data);
     });
 }, []);
-  function pickHotelWeighted(
-  hotels: { name: string; url: string }[],
-  clicks: Record<string, number>
-) {
-  const weights = hotels.map(h => (clicks[h.name] || 1));
 
-  const total = weights.reduce((a, b) => a + b, 0);
-  let rand = Math.random() * total;
+  const trackClick = async (type: string, name: string) => {
+  await fetch("/api/click", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type, name }),
+  });
+};
 
-  for (let i = 0; i < hotels.length; i++) {
-    if (rand < weights[i]) return hotels[i];
-    rand -= weights[i];
+    // 👇 ② ここに書く（CTRスコア）
+  function calculateScore(name: string) {
+    const clicks = hotelClicks[name] || 0;
+    const impressions = hotelImpressions[name] || 0;
+    return (clicks + 1) / (impressions + 2);
   }
 
-  return hotels[0];
-}
+  function pickHotelWeighted(
+  hotels: { name: string; url: string }[]
+    ){const weights = hotels.map(h => calculateScore(h.name));
+    const total = weights.reduce((a, b) => a + b, 0);
+    let rand = Math.random() * total;
+    for (let i = 0; i < hotels.length; i++) {
+      if (rand < weights[i]) return hotels[i];
+      rand -= weights[i];
+    }
+    return hotels[0];
+  }
+
   const hotels = [
   {
     name: "Shibuya Excel Hotel Tokyu",
@@ -62,17 +79,20 @@ export default function Finder() {
   ];
 const baseHotels = hotels;
 
-const randomHotel = pickHotelWeighted(baseHotels, hotelClicks);
-    // 👇ここに追加（searchの外！！）
-  const trackClick = async (type: string, name: string) => {
-    await fetch("/api/click", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ type, name }),
-    });
-  };
+const randomHotel = pickHotelWeighted(baseHotels);
+
+
+// 👇この直後
+useEffect(() => {
+  if (randomHotel) {
+    trackClick("impression", randomHotel.name);
+  }
+}, [randomHotel]);
+
+const topHotel = hotels.reduce((best, h) => {
+  return calculateScore(h.name) > calculateScore(best.name) ? h : best;
+}, hotels[0]);
+
   
   const search = async () => {
     setLoading(true);
@@ -232,38 +252,62 @@ const randomHotel = pickHotelWeighted(baseHotels, hotelClicks);
             </a>
           </h2>
                   {/* ① 1位の直後にホテル */}
+              {index === 0 && (
+                  <a
+                    href={topHotel.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackClick("hotel", topHotel.name)}
+                    style={{
+                      display: "block",
+                      marginTop: "10px",
+                      padding: "12px",
+                      background: "#ff5a5f",
+                      color: "#fff",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                    }}
+                  >
+                    👑 Best Choice — Book near here
+                  </a>
+                )}
 
-            {index === 0 && (
-
-              <a
-                href={randomHotel.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackClick("hotel", randomHotel.name)}
-                style={{
-                  display: "block",
-                  marginTop: "10px",
-                  padding: "12px",
-                  background: "#ff5a5f",
-                  color: "#fff",
-                  borderRadius: "8px",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  textDecoration: "none"
-                }}
-              >
-                🏨 Stay at {randomHotel.name}
-              </a>
+                {index === 1 && (
+                  <a
+                    href={randomHotel.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackClick("hotel", randomHotel.name)}
+                    style={{
+                      display: "block",
+                      marginTop: "10px",
+                      padding: "12px",
+                      background: "#333",
+                      color: "#fff",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                    }}
+                  >
+                    🔥 Explore more hotel deals
+                  </a>
+                )}
+            
+             {calculateScore(r.name) > 0.3 && (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+                🔥 Popular
+              </p>
             )}
+          <p style={{ fontSize: "12px", color: "#666" }}>
+            CTR: {(calculateScore(r.name) * 100).toFixed(0)}%
+          </p>
             <p style={{ fontWeight: "bold" }}>⭐ {r.rating}</p>
             <p>💰 Price: {r.price}</p>
             {r.rating > 4.3 && (
             <p style={{ color: "red" }}>🔥 Popular spot</p>
-            )}
-            {r.rating > 4.5 && (
-            <p style={{ color: "red", fontWeight: "bold" }}>
-              🔥 Highly Recommended
-            </p>
             )}
 
             {r.reason && (

@@ -6,11 +6,16 @@ export async function GET() {
     .from("hotel_clicks")
     .select("*");
 
-  const result: Record<string, number> = {};
+  const resultClicks: Record<string, number> = {};
+  const resultImpressions: Record<string, number> = {};
 
   data?.forEach((row) => {
-    result[row.name] = row.count;
+    resultClicks[row.name] = row.count;
+    resultImpressions[row.name] = row.impressions;
   });
 
-  return NextResponse.json(result);
+  return NextResponse.json({
+    clicks: resultClicks,
+    impressions: resultImpressions,
+  });
 }
