@@ -60,12 +60,7 @@ export default function Finder() {
     url: "https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1961634&hl=en-us&hid=2312"
   }
   ];
-const filteredHotels = hotels.filter(h => {
-  return (hotelClicks[h.name] || 0) >= 1;
-});
-
-const baseHotels =
-  filteredHotels.length > 0 ? filteredHotels : hotels;
+const baseHotels = hotels;
 
 const randomHotel = pickHotelWeighted(baseHotels, hotelClicks);
     // 👇ここに追加（searchの外！！）
