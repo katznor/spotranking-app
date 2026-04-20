@@ -271,7 +271,10 @@ const topHotel = hotels.reduce((best, h) => {
                     }}
                   >
                     👑 Best hotel near this spot
-                  </a>
+                      <div style={{ fontSize: "12px", opacity: 0.9, marginTop: "4px" }}>
+                        🏨 {topHotel.name}
+                      </div>
+                     </a>
                 )}
 
                 {index === 1 && (
@@ -293,6 +296,9 @@ const topHotel = hotels.reduce((best, h) => {
                     }}
                   >
                     🔥 More stays near this area
+                      <div style={{ fontSize: "12px", opacity: 0.9, marginTop: "4px" }}>
+                      🏨 {randomHotel.name}
+                      </div>
                   </a>
                 )}
             
