@@ -214,9 +214,9 @@ const topHotel = hotels.reduce((best, h) => {
         <button onClick={search}
           style={{
           background: "#ff5a5f",
-          fontSize: "16px",
+          fontSize:  "clamp(16px, 2vw, 22px)",
           width: "100%",
-          padding: "14px"
+          padding: "clamp(14px, 2vw, 20px)"
           }}
           >
           {loading ? "Searching..." : "Search"}
