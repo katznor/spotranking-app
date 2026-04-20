@@ -120,7 +120,8 @@ const topHotel = hotels.reduce((best, h) => {
     margin: "0 auto",
     background: "#f7f7f7",
     minHeight: "100vh",
-    color: "#111"
+    color: "#111",
+    fontSize: "clamp(16px, 1.2vw, 18px)"
   }}>
 
   <button
