@@ -372,7 +372,7 @@ const topHotel = hotels.reduce((best, h) => {
 
             {/* 仮の収益ボタン */}
             <a
-              href="https://affiliate.klook.com/redirect?aid=117048&aff_adid=1260258&k_site=https%3A%2F%2Fwww.klook.com%2F"
+              href="https://affiliate.klook.com/redirect?aid=117048&aff_adid=1260262&k_site=https%3A%2F%2Fwww.klook.com%2Fja-JP%2Factivity%2F150840-crossing-view-rooftop-lounge-mag8-ticket%2F"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackClick("klook", r.name)}
