@@ -79,8 +79,15 @@ export default function Finder() {
   ];
 const baseHotels = hotels;
 
-const randomHotel = pickHotelWeighted(baseHotels);
+const [randomHotel, setRandomHotel] = useState<any>(null);
 
+useEffect(() => {
+
+  const selected = pickHotelWeighted(baseHotels);
+
+  setRandomHotel(selected);
+
+}, [hotelClicks]); // ←ここ重要（データ変わった時だけ）
 
 // 👇この直後
 useEffect(() => {
