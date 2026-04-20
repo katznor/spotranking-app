@@ -270,7 +270,7 @@ const topHotel = hotels.reduce((best, h) => {
                       textDecoration: "none"
                     }}
                   >
-                    👑 Best Choice — Book near here
+                    👑 Best hotel near this spot
                   </a>
                 )}
 
@@ -292,7 +292,7 @@ const topHotel = hotels.reduce((best, h) => {
                       textDecoration: "none"
                     }}
                   >
-                    🔥 Explore more hotel deals
+                    🔥 More stays near this area
                   </a>
                 )}
             
