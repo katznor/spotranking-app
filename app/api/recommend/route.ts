@@ -39,9 +39,9 @@ if (results.length === 0) {
 // スコアリング（改善版）
 
     // reason付与
-    results = results.map((r: any) => ({
+    results = results.map((r: any, index: number) => ({
       ...r,
-      reason: buildReason(r, vibe),
+      reason: buildReason(r, vibe, index),
     }));
 
 
@@ -87,18 +87,22 @@ function calculateScore(r: any, vibe: string, late: boolean) {
 
 
 // ■ 理由生成（UXの核）
-function buildReason(r: any, vibe: string) {
+function buildReason(r: any, vibe: string, index: number) {
   let reasons = [];
 
-  if (vibe && r.vibe.includes(vibe)) {
-    reasons.push(`🔥 Best for ${vibe}`);
+  if (index === 0) {
+    reasons.push("🔥 Best overall choice");
   }
 
-  if (r.openLate) {
-    reasons.push("🌙 Open late");
+  if (index === 1) {
+    reasons.push("🌙 Great for late night");
   }
 
-  if (r.rating > 4.4) {
+  if (index === 2) {
+    reasons.push("💰 Best value option");
+  }
+
+  if (r.rating > 4.5) {
     reasons.push("⭐ Top rated");
   }
 
