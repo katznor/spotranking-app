@@ -3,10 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-<h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
-  Best spots in Shibuya for your vibe
-</h2>
-
 type Spot = {
   name: string;
   price: string;
@@ -172,10 +168,10 @@ const topHotel = hotels.reduce((best, h) => {
         fontWeight: "bold",
         marginBottom: "10px"
       }}>
-      Find your perfect spot in Shibuya
+      Best spots in Shibuya based on your vibe
       </h1>
       <p style={{ color: "#666", marginBottom: "20px" }}>
-        Discover the best places based on your vibe.
+        Handpicked recommendations for food, cafes, and hidden gems
       </p>
 
       {/* 入力UI */}
