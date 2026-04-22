@@ -129,6 +129,7 @@ const topHotel = hotels.reduce((best, h) => {
     });
 
     const data = await res.json();
+    console.log("results:", data); // 👈 ここに追加    
     setResults(data);
 
     setLoading(false);
