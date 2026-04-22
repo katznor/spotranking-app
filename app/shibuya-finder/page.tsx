@@ -3,6 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+<h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
+  Best spots in Shibuya for your vibe
+</h2>
+
 type Spot = {
   name: string;
   price: string;
